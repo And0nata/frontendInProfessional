@@ -1,0 +1,31 @@
+// ==UserScript==
+// @name         YaFrontBot1
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Script for search in duckduckgo
+// @author       Natasha Andreeva
+// @match        https://ya.ru/*
+// @match        https://yandex.ru/*
+// @match        https://habr.com/*
+// @icon         https://s1.iconbird.com/ico/2013/9/450/w256h2561380453921Search256x25632.png
+// @grant        none
+// ==/UserScript==
+
+let links = document.links;
+let search_button = document.querySelector("button[type='submit']");
+let keywords = ["frontend", "Обучение фронтенду", "Обучение front-end", "Фронтенд разработчик", "frontend разработчик"];
+let keyword = keywords[getRandom(0, keywords.length)];
+let Input = document.getElementById("text");
+
+if (location.hostname == "ya.ru" && Input.value == "") {
+  document.getElementById("text").value = keyword;
+  search_button.click();
+} else {
+  for (let i = 0; i < links.length; i++) {
+    if (links[i].href.includes("https://habr.com/")) {
+      let link = links[i];
+      console.log("Нашел строку " + link);
+      link.click();
+      }
+  }
+}
