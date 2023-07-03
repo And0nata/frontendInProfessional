@@ -1,0 +1,63 @@
+// ==UserScript==
+// @name         BingFrontBot2
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Script for search frontend in bing
+// @author       Natasha Andreeva
+// @match        https://www.bing.com/*
+// @match        https://developer.mozilla.org/*
+// @icon         https://s1.iconbird.com/ico/2013/9/450/w256h2561380453921Search256x25632.png
+// @grant        none
+// ==/UserScript==
+
+let links = document.links
+let search_button = document.getElementsByName("search")[0];
+let keywords = ["frontend", "Обучение фронтенду", "Обучение front-end", "Фронтенд разработчик", "frontend разработчик"];
+let keyword = keywords[getRandom(0, keywords.length)];
+let Input = document.getElementsByName("q")[0];
+
+if (search_button != undefined) {
+  let i = 0;
+  let timerId = setInterval(() => {
+    Input.value += keyword[i];
+    i++;
+    if (i == keyword.length) {
+      clearInterval(timerId);
+      search_button.click();
+    }
+  }, 500);
+} else if (location.hostname == "developer.mozilla.org") {
+  console.log("Мы на сайте!");
+
+  setInterval(() => {
+    let index = getRandom(0, links.length);
+
+    if (getRandom(0, 101) >= 70) {
+      location.href = "https://www.bing.com/";
+    }
+    if (links.length == 0) {
+      location.href = "https://developer.mozilla.org/";
+    }
+    else if (links[index].href.indexOf("mozilla.org") != -1) {
+      links[index].click();
+    }
+  }, getRandom(1000, 2000))
+
+} else {
+  let nextPage = true;
+  for (let i = 0; i < links.length; i++) {
+    if (links[i].href.includes("mozilla.org")) {
+      let link = links[i];
+      nextPage = false;
+      console.log("Нашел строку " + link);
+      setTimeout(() => {
+        link.click();
+      }, getRandom(1500, 2500));
+      break;
+    }
+  }
+}
+
+function getRandom(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
