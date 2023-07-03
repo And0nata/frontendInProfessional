@@ -1,0 +1,32 @@
+// ==UserScript==
+// @name         BingFrontBot1
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Script for search in duckduckgo
+// @author       Natasha Andreeva
+// @match        https://www.bing.com/*
+// @match        https://www.mozilla.org/*
+// @match        https://developer.mozilla.org/*
+// @icon         https://s1.iconbird.com/ico/2013/9/450/w256h2561380453921Search256x25632.png
+// @grant        none
+// ==/UserScript==
+
+let links = document.links;
+let search_button = document.getElementsByName("search")[0];
+let keywords = ["frontend", "Обучение фронтенду", "Обучение front-end", "Фронтенд разработчик", "frontend разработчик"];
+let keyword = keywords[getRandom(0, keywords.length)];
+let go_input = document.getElementsByName("q")[0];
+
+if (search_button != undefined && go_input.value == "") {
+  document.getElementsByName("q")[0].value = keyword;
+  search_button.click();
+} else {
+  for (let i = 0; i < links.length; i++) {
+    if (links[i].href.includes("mozilla.org")) {
+      let link = links[i];
+      console.log("Нашел строку " + links[i]);
+      link.click();
+      break;
+    }
+  }
+}
